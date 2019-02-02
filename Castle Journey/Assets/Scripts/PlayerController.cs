@@ -14,7 +14,7 @@ public class PlayerController : MonoBehaviour
 
 	const float k_GroundedRadius = .2f; // Radius of the overlap circle to determine if grounded
 	private bool m_Grounded;            // Whether or not the player is grounded.
-	private bool m_Doublejump;            // For DoubleJump
+	private int m_Doublejump;            // For DoubleJump
 	const float k_CeilingRadius = .2f; // Radius of the overlap circle to determine if the player can stand up
 	private Rigidbody2D m_Rigidbody2D;
 	private bool m_FacingRight = true;  // For determining which way the player is currently facing.
@@ -127,22 +127,39 @@ public class PlayerController : MonoBehaviour
 		// If the player should jump...
 		if (jump)
 		{
+		// 	// Add a vertical force to the player.
+		// 	if(m_Grounded)
+		// 	{
+		// 		m_Grounded = false;
+		// 		m_Rigidbody2D.AddForce(new Vector2(0f, m_JumpForce));
+		// 		m_Doublejump = 0;
+		// 	}
+			
+		// 	else
+		// 	{
+		// 		if(m_Doublejump)
+		// 		{
+		// 			m_Doublejump = false;
+		// 			m_Rigidbody2D.velocity = new Vector2(m_Rigidbody2D.velocity.x,0);
+		// 			m_Rigidbody2D.AddForce(new Vector2(0f, m_JumpForce));
+		// 		}
+		// 	}
+		// }
+
 			// Add a vertical force to the player.
 			if(m_Grounded)
 			{
-				m_Grounded = false;
-				m_Rigidbody2D.AddForce(new Vector2(0f, m_JumpForce));
-				m_Doublejump = true;
+				m_Doublejump = 0;
 			}
-			else
+			if(m_Grounded || m_Doublejump < 2)
 			{
-				if(m_Doublejump)
-				{
-					m_Doublejump = false;
-					m_Rigidbody2D.velocity = new Vector2(m_Rigidbody2D.velocity.x,0);
-					m_Rigidbody2D.AddForce(new Vector2(0f, m_JumpForce));
-				}
+				
+				m_Rigidbody2D.velocity = new Vector2(m_Rigidbody2D.velocity.x,0);
+				m_Rigidbody2D.AddForce(new Vector2(0f, m_JumpForce));
+				m_Doublejump += 1;
+				m_Grounded = false;
 			}
+			
 		}
 	}
 
