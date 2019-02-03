@@ -32,13 +32,18 @@ public class PlayerMovement : MonoBehaviour
         animator.SetFloat("Speed", Mathf.Abs(moveH));
         
         // if (Input.GetButtonDown("Jump"))
-        if (joybutton.Pressed || Input.GetButtonDown("Jump"))
-        {
-            jump = true;
-            animator.SetBool("IsJumping", true);
-        }
+        // if (joybutton.Pressed || Input.GetButtonDown("Jump"))
+        // {
+        //     jump = true;
+        //     animator.SetBool("IsJumping", true);
+        // }
     }
-
+    
+    public void Jump()
+    {
+        jump = true;
+        animator.SetBool("IsJumping", true);
+    }
     public void Landing()
     {
         animator.SetBool("IsJumping", false);
