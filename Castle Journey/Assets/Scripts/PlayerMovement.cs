@@ -12,8 +12,8 @@ public class PlayerMovement : MonoBehaviour
 
     public float runSpeed = 20f;
 
-    float moveH = 0f;
-    bool jump = false;
+    private float moveH = 0f;
+    private bool jump = false;
 
     // Update is called once per frame
     void Update()
@@ -31,12 +31,11 @@ public class PlayerMovement : MonoBehaviour
 
         animator.SetFloat("Speed", Mathf.Abs(moveH));
         
-        // if (Input.GetButtonDown("Jump"))
-        // if (joybutton.Pressed || Input.GetButtonDown("Jump"))
-        // {
-        //     jump = true;
-        //     animator.SetBool("IsJumping", true);
-        // }
+        if (Input.GetButtonDown("Jump"))
+        {
+            jump = true;
+            animator.SetBool("IsJumping", true);
+        }
     }
     
     public void Jump()
@@ -48,6 +47,8 @@ public class PlayerMovement : MonoBehaviour
     {
         animator.SetBool("IsJumping", false);
     }
+
+    
 
     void FixedUpdate()
     {

@@ -10,6 +10,8 @@ public class PlayerHealth : MonoBehaviour
     public Image[] Hearts;
     public Sprite fullHeart;
     public Sprite emptyHeart;
+    
+    public int livesToGive;
 
 
     // Start is called before the first frame update
@@ -48,7 +50,13 @@ public class PlayerHealth : MonoBehaviour
         }
     }
 
-    void Die(){
+    public void AddLife(int livesToGive)
+    {
+        Health += livesToGive;
+    }
+
+    void Die()
+    {
         //Restart
         Application.LoadLevel(Application.loadedLevel);
     }
