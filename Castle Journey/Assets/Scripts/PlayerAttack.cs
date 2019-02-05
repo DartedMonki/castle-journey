@@ -6,8 +6,8 @@ public class PlayerAttack : MonoBehaviour
 {
     public Collider2D attackTrigger;
     public Animator animator;
+    public bool attacking = false;
     
-    private bool attacking = false;
     private float attackTimer = 0.4f;
     private bool clicked = false;
     
@@ -24,7 +24,7 @@ public class PlayerAttack : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (clicked && !attacking)
+        if ( (Input.GetButtonDown("Fire1") || clicked) && !attacking)
         {
             attacking = true;
             attackTimer = 0.4f;

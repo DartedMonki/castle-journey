@@ -10,11 +10,16 @@ public class PlayerMovement : MonoBehaviour
     public Joystick joystick;
     public Joybutton joybutton;
 
+    private PlayerAttack p_Attack;
     public float runSpeed = 20f;
 
     private float moveH = 0f;
     private bool jump = false;
 
+    void Awake()
+    {
+        p_Attack = GetComponent<PlayerAttack>();
+    }
     // Update is called once per frame
     void Update()
     {
@@ -42,6 +47,7 @@ public class PlayerMovement : MonoBehaviour
     {
         jump = true;
         animator.SetBool("IsJumping", true);
+
     }
     public void Landing()
     {

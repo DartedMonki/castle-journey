@@ -58,7 +58,8 @@ public class PlayerController : MonoBehaviour
 			if (colliders[i].gameObject != gameObject)
 			{
 				m_Grounded = true;
-				if (!wasGrounded && m_Rigidbody2D.velocity.y < 0)
+				
+				if ((!wasGrounded && m_Rigidbody2D.velocity.y < 0) )
 					OnLandEvent.Invoke();
 			}
 		}
