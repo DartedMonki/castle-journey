@@ -7,6 +7,7 @@ public class PlayerHealth : MonoBehaviour
 {
     public int Health;
 
+
     public Image[] Hearts;
     public Sprite fullHeart;
     public Sprite emptyHeart;
@@ -48,6 +49,7 @@ public class PlayerHealth : MonoBehaviour
                 Hearts[i].enabled = false;
             }
         }
+
     }
 
     public void AddLife(int livesToGive)
