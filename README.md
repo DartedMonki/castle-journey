@@ -9,11 +9,12 @@ Aplikasi yang kami buat yang dilatarbelakangi oleh kasus-kasus tersebut adalah b
 ## Development
 Want to contribute? Great!
 
-Castle Journey uses Unity for development
+Castle Journey uses Unity for development.
 
 Open your favorite Terminal and run this command.
 ```sh
 $ git clone https://github.com/DartedMonki/Castle_Journey.git
 ```
-Then open Unity3D and open the game project folder
-Open the game
+Then open Unity3D and open the game project folder.
+
+Open the game.
