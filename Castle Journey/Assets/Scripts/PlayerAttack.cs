@@ -8,7 +8,7 @@ public class PlayerAttack : MonoBehaviour
     public Animator animator;
     public bool attacking = false;
     
-    private float attackTimer = 0.4f;
+    private float attackTimer = 0.2f;
     private bool clicked = false;
     
     public void ButtonClick()
@@ -27,7 +27,7 @@ public class PlayerAttack : MonoBehaviour
         if ( (Input.GetButtonDown("Fire1") || clicked) && !attacking)
         {
             attacking = true;
-            attackTimer = 0.4f;
+            attackTimer = 0.2f;
             attackTrigger.enabled = true;
             clicked = false;
             
