@@ -7,6 +7,7 @@ This is a 2d platformer android game created in unity. The games we make are one
 Aplikasi yang kami buat yang dilatarbelakangi oleh kasus-kasus tersebut adalah bernama Castle Journey. Aplikasi yang kami buat adalah berbasis aplikasi permainan bertemakan platformer 2D yang berbasis Android. Permainan yang kami buat merupakan permainan one line story atau hanya cerita yang tidak memiliki cabang dan ending yang berbeda. Permainan yang kami buat menceritakan tentang seorang pangeran yang sedang berkelana mengunjungi istana-istana di dunia sendirian tanpa pengawalan pasukan kerajaan yang dihadapkan oleh rintangan-rintangan seperti para monster. Pangeran dapat membunuh monster tersebut dengan memukul monster tersebut. Namun apakah semudah itu monster itu akan dikalahkan? Tidak, pangeran harus berusaha lebih keras seperti memukul beberapa kali untuk membunuh monster tersebut. Sang pangeran dapat mati jika pangeran terkena pukulan dari monster tersebut jika dia terkena pukulan sebanyak 3 kali lalu permainan berakhir. Permainan ini pun tidak hanya berfokuskan pada penyelesaian perjalanan dari sang pangeran namun juga mencari poin tertinggi yaitu dengan mendapatkan koin saat berkelana dan juga berapa lama pangeran sanggup berkelana dari istana pertama sampai ke istana terakhir.
 
 ## Development
+Developed using Unity 2018.3.6f1 
 Want to contribute? Great!
 
 Castle Journey uses Unity for development.
@@ -15,6 +16,6 @@ Open your favorite Terminal and run this command.
 ```sh
 $ git clone https://github.com/DartedMonki/Castle_Journey.git
 ```
-Then open Unity3D and open the game project folder.
+Open Unity3D.
 
-Open the game.
+Open the game project folder.
