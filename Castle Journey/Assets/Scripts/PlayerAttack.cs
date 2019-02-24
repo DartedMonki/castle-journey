@@ -7,10 +7,18 @@ public class PlayerAttack : MonoBehaviour
     public Collider2D attackTrigger;
     public Animator animator;
     public bool attacking = false;
-    
-    private float attackTimer = 0.2f;
+
+
+    [SerializeField] private float attackTimer = 0.2f;
     private bool clicked = false;
-    
+    private Enemy enemy;
+
+
+    private void Start()
+    {
+        enemy = FindObjectOfType<Enemy>();
+    }
+
     public void ButtonClick()
     {
         clicked = true;
@@ -50,6 +58,16 @@ public class PlayerAttack : MonoBehaviour
         
         animator.SetBool("IsAttack", attacking);
 
+    }
+
+    void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.tag == "Enemy")
+        {
+            enemy.Damage(1);
+            //StartCoroutine(enemy.Knockback(0.02f, 350, enemy.transform.position));
+            Debug.Log("Attacked");
+        }
     }
 
 }

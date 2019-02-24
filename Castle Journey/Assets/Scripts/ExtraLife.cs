@@ -3,7 +3,7 @@ using System.Collections;
 
 public class ExtraLife : MonoBehaviour
 {
-    public int livesToGive = 1;
+    [SerializeField] private int livesToGive = 1;
     
     private PlayerHealth health;
 

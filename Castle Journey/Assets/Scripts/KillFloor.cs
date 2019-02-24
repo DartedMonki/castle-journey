@@ -15,7 +15,7 @@ public class KillFloor : MonoBehaviour
     {
         if(collision.tag == "Player")
         {
-            health.Health = 0;
+            health.Damage(3);
         }
     }
 }

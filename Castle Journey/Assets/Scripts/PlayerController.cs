@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using UnityEngine.Events;
+using System.Collections;
 
 public class PlayerController : MonoBehaviour
 {
@@ -167,7 +168,26 @@ public class PlayerController : MonoBehaviour
 		}
 	}
 
-	private void Flip()
+    public IEnumerator Knockback(float knockDur, float knockPwr, Vector3 knockDir)
+    {
+        float timer = 0;
+        m_Rigidbody2D.velocity = new Vector2(m_Rigidbody2D.velocity.x, 0);
+        while (knockDur > timer)
+        {
+            timer += Time.deltaTime;
+            if (m_FacingRight)
+            {
+                m_Rigidbody2D.AddForce(new Vector3(knockDir.x * -50, knockDir.y + knockPwr, transform.position.z));
+            }
+            else
+            {
+                m_Rigidbody2D.AddForce(new Vector3(knockDir.x * 50, knockDir.y + knockPwr, transform.position.z));
+            }
+        }
+        yield return 0;
+    }
+
+    private void Flip()
 	{
 		// Switch the way the player is labelled as facing.
 		m_FacingRight = !m_FacingRight;

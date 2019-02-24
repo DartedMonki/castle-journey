@@ -11,7 +11,7 @@ public class PlayerMovement : MonoBehaviour
     public Joybutton joybutton;
 
     private PlayerAttack p_Attack;
-    public float runSpeed = 20f;
+    [SerializeField] private float runSpeed = 20f;
 
     private float moveH = 0f;
     private bool jump = false;

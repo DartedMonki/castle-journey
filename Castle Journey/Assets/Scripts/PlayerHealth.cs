@@ -57,6 +57,12 @@ public class PlayerHealth : MonoBehaviour
         Health += livesToGive;
     }
 
+    public void Damage(int dmg)
+    {
+        Health -= dmg;
+        gameObject.GetComponent<Animation>().Play("PlayerAttackedRed");
+    }
+
     void Die()
     {
         //Restart
