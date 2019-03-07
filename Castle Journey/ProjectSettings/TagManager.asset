@@ -6,6 +6,7 @@ TagManager:
   tags:
   - PlayerAttacking
   - Enemy
+  - Platform
   layers:
   - Default
   - TransparentFX
@@ -17,7 +18,7 @@ TagManager:
   - 
   - Player
   - Tileset
-  - 
+  - Ground
   - 
   - 
   - 
