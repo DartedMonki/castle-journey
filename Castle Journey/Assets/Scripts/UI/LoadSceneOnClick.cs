@@ -7,6 +7,7 @@ public class LoadSceneOnClick : MonoBehaviour
 {
     public void LoadByIndex(int index)
     {
+        //AsyncOperator operation = Scenemanager.LoadSceneAsync(index);
         SceneManager.LoadScene(index);
     }
 }
