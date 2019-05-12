@@ -11,7 +11,7 @@ public class Enemy : MonoBehaviour
     [SerializeField] private Transform groundedDetection;
     [SerializeField] private bool movingRight = true;
     [SerializeField] private bool facingRight = true;
-    public int enemyLife = 3;
+    [SerializeField] private int enemyLife = 3;
 
     private PlayerHealth p_health;
     private Score p_score;

@@ -4,9 +4,9 @@ using UnityEngine;
 
 public class PlayerAttack : MonoBehaviour
 {
-    public Collider2D attackTrigger;
-    public Animator animator;
-    public bool attacking = false;
+    [SerializeField] private Collider2D attackTrigger;
+    [SerializeField] private Animator animator;
+    [SerializeField] private bool attacking = false;
 
 
     [SerializeField] private float attackTimer = 0.2f;

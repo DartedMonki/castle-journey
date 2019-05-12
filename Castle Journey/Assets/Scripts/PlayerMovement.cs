@@ -4,15 +4,13 @@ using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
 {
-
-    public PlayerController controller;
-    public Animator animator;
-    public Joystick joystick;
-    public Joybutton joybutton;
-
-    private PlayerAttack p_Attack;
+    [SerializeField] private PlayerController controller;
+    [SerializeField] private Animator animator;
+    [SerializeField] private Joystick joystick;
     [SerializeField] private float runSpeed = 20f;
 
+    
+    private PlayerAttack p_Attack;
     private float moveH = 0f;
     private bool jump = false;
 
@@ -39,22 +37,14 @@ public class PlayerMovement : MonoBehaviour
         if (Input.GetButtonDown("Jump"))
         {
             jump = true;
-            animator.SetBool("IsJumping", true);
         }
     }
     
     public void Jump()
     {
         jump = true;
-        animator.SetBool("IsJumping", true);
-
-    }
-    public void Landing()
-    {
-        animator.SetBool("IsJumping", false);
     }
 
-    
 
     void FixedUpdate()
     {

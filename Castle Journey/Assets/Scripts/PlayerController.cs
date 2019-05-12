@@ -9,6 +9,7 @@ public class PlayerController : MonoBehaviour
 	[SerializeField] private bool m_AirControl = false;	
 	[SerializeField] private LayerMask m_WhatIsGround;						
 	[SerializeField] private Transform m_GroundCheck;
+	[SerializeField] private Animator animator;
 
     const float k_GroundedRadius = 1f; 
 	private bool m_Grounded;         
@@ -49,8 +50,11 @@ public class PlayerController : MonoBehaviour
 			{
 				m_Grounded = true;
 				
+
 				if ((!wasGrounded && m_Rigidbody2D.velocity.y < 0) )
 					OnLandEvent.Invoke();
+					animator.SetBool("IsJumping", !m_Grounded);
+					
 			}
 		}
 	}
@@ -58,7 +62,9 @@ public class PlayerController : MonoBehaviour
 
 	public void Move(float move, bool jump)
 	{
-
+		if (m_Grounded == false)
+		animator.SetBool("IsJumping", true);
+		
 		if (m_Grounded || m_AirControl)
 		{
 
@@ -79,7 +85,7 @@ public class PlayerController : MonoBehaviour
 
 		if (jump)
 		{
-
+			
 			if(m_Grounded)
 			{
 				m_Doublejump = 0;
