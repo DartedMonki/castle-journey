@@ -5,21 +5,13 @@ using UnityEngine;
 
 public class PauseScript : MonoBehaviour
 {
-
     public static bool GameIsPaused = false;
+
     public GameObject pauseMenuUI;
+    //public GameObject GameUI;
 
-    public AudioSource audioSource;
-
-    void Start()
-    {
-        audioSource = FindObjectOfType<AudioSource>();
-    }
-
-    // Update is called once per frame
     void Update()
     {
-    
         if (Input.GetKeyDown(KeyCode.Escape))
         {
             if (GameIsPaused)
@@ -34,15 +26,17 @@ public class PauseScript : MonoBehaviour
     }
     public void Resume()
     {
-        audioSource.Play(0);
+        //audioSource.Play(0);
         pauseMenuUI.SetActive(false);
+        //GameUI(true);
         Time.timeScale = 1f;
         GameIsPaused = false;
     }
 
-    void Pause ()
+    void Pause()
     {
-        audioSource.Pause();
+        //audioSource.Pause();
+        //GameUI(false);
         pauseMenuUI.SetActive(true);
         Time.timeScale = 0f;
         GameIsPaused = true;
