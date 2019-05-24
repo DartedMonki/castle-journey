@@ -48,6 +48,7 @@ public class PlayerController : MonoBehaviour
 
         enemy = FindObjectOfType<Enemy>();
         attackTrigger.enabled = false;
+        Time.timeScale = 1f;
     }
 
     public void Attack()

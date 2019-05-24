@@ -11,6 +11,12 @@ public class PlayerHealth : MonoBehaviour
     
     public int livesToGive;
     public int Health;
+    
+    //matiin
+    public GameObject music;
+    public GameObject gameCanvas;
+    //nyalain
+    public GameObject endgameCanvas;
 
     // Start is called before the first frame update
     void Start()
@@ -63,6 +69,14 @@ public class PlayerHealth : MonoBehaviour
     void Die()
     {
         //Restart
-        Application.LoadLevel(Application.loadedLevel);
+        //Application.LoadLevel(Application.loadedLevel);
+
+        //Matiin canvas sama BackGround music
+        music.SetActive(false);
+        gameCanvas.SetActive(false);
+        //Nyalain end Game canvas
+        endgameCanvas.SetActive(true);
+        //Berhentiin Game seketika
+        Time.timeScale = 0f;
     }
 }
