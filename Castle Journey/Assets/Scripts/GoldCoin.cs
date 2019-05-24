@@ -4,7 +4,6 @@ using System.Collections;
 public class GoldCoin : MonoBehaviour
 {
     public int coinValue = 500;
-
     private Score score;
 
     // Use this for initialization

@@ -5,15 +5,12 @@ using UnityEngine.UI;
 
 public class PlayerHealth : MonoBehaviour
 {
-    public int Health;
-
-
     public Image[] Hearts;
     public Sprite fullHeart;
     public Sprite emptyHeart;
     
     public int livesToGive;
-
+    public int Health;
 
     // Start is called before the first frame update
     void Start()

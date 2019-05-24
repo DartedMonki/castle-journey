@@ -3,12 +3,9 @@ using System.Collections;
 
 public class Enemy : MonoBehaviour
 {
-    
-    //[SerializeField] private GameObject effect;
-    [SerializeField] private float speed = 2;
-    //[SerializeField] private float raydistance = 3;
-    [SerializeField] private float distanceFromPlayer = 10;
     [SerializeField] private Transform groundedDetection;
+    [SerializeField] private float speed = 2;
+    [SerializeField] private float distanceFromPlayer = 10;
     [SerializeField] private bool movingRight = true;
     [SerializeField] private bool facingRight = true;
     [SerializeField] private int enemyLife = 3;
@@ -16,7 +13,6 @@ public class Enemy : MonoBehaviour
     private PlayerHealth p_health;
     private Score p_score;
     private PlayerController p_control;
-    //private Rigidbody2D rb;
     private Animator anim;
     private Transform target;
 
@@ -27,7 +23,6 @@ public class Enemy : MonoBehaviour
         p_health = FindObjectOfType<PlayerHealth>();
         p_control = FindObjectOfType<PlayerController>();
         p_score = FindObjectOfType<Score>();
-        //rb = GetComponent<Rigidbody2D>();
     }
 
     // Update is called once per frame
@@ -77,13 +72,10 @@ public class Enemy : MonoBehaviour
         
         if (col.gameObject.tag.Equals("Player"))
         {
-            //Instantiate(effect, transform.position, Quaternion.identity);
-            //Destroy(gameObject);
             anim.SetBool("IsAttack", true);
             p_health.Damage(1);
             StartCoroutine(p_control.Knockback(0.02f, 350, p_control.transform.position));
             Debug.Log("Attacking");
-
         }
         else anim.SetBool("IsAttack", false);
     }

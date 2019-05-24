@@ -5,28 +5,26 @@ using System.Collections.Generic;
 
 public class PlayerController : MonoBehaviour
 {
-	[SerializeField] private float m_JumpForce = 400f;							
-	[Range(0, .3f)] [SerializeField] private float m_MovementSmoothing = .05f;
-	[SerializeField] private bool m_AirControl = false;	
 	[SerializeField] private LayerMask m_WhatIsGround;						
 	[SerializeField] private Transform m_GroundCheck;
 	[SerializeField] private Animator animator;
     [SerializeField] private Joystick joystick;
-    [SerializeField] private float runSpeed = 20f;
     [SerializeField] private Collider2D attackTrigger;
     [SerializeField] private float attackTimer = 0.2f;
+    [SerializeField] private bool m_AirControl = false;
+    [SerializeField] private float m_JumpForce = 400f;
+    [Range(0, .3f)] [SerializeField] private float m_MovementSmoothing = .05f;
+    [SerializeField] private float runSpeed = 20f;
 
+    private Enemy enemy;
+    private Rigidbody2D m_Rigidbody2D;
+    private Vector3 m_Velocity = Vector3.zero;
     private bool attacking = false;
     private bool clicked = false;
-    private Enemy enemy;
-
     const float k_GroundedRadius = 1f; 
 	private bool m_Grounded;         
 	private int m_Doublejump;           
-	private Rigidbody2D m_Rigidbody2D;
 	private bool m_FacingRight = true; 
-	private Vector3 m_Velocity = Vector3.zero;
-    private PlayerAttack p_Attack;
     private float moveH = 0f;
     private bool jump = false;
 
@@ -48,7 +46,6 @@ public class PlayerController : MonoBehaviour
 				OnLandEvent = new UnityEvent();
 			}
 
-        p_Attack = GetComponent<PlayerAttack>();
         enemy = FindObjectOfType<Enemy>();
         attackTrigger.enabled = false;
     }
