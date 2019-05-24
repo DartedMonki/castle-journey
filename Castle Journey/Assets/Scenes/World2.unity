@@ -821,7 +821,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 6607501963812336939}
+      - m_Target: {fileID: 8159494166167813995}
         m_MethodName: Jump
         m_Mode: 1
         m_Arguments:
@@ -2822,8 +2822,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 877055909917370568}
-        m_MethodName: ButtonClick
+      - m_Target: {fileID: 8159494166167813995}
+        m_MethodName: Attack
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -22565,22 +22565,6 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 4
---- !u!114 &877055909917370568
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 877055909917370570}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 38078602fc8a4cf4eadc5ed93d323a87, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  attackTrigger: {fileID: 8070316246306322638}
-  animator: {fileID: 9027307285726867413}
-  attacking: 0
-  attackTimer: 0.2
 --- !u!114 &877055909917370569
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -22616,10 +22600,8 @@ GameObject:
   - component: {fileID: 7998189622014987335}
   - component: {fileID: 326751619558177879}
   - component: {fileID: 8159494166167813995}
-  - component: {fileID: 6607501963812336939}
   - component: {fileID: 8070316246372629805}
   - component: {fileID: 877055909917370569}
-  - component: {fileID: 877055909917370568}
   m_Layer: 8
   m_Name: Player
   m_TagString: Player
@@ -22737,22 +22719,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &6607501963812336939
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 877055909917370570}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6af060fb3b46900468cc45440fbd64da, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  controller: {fileID: 8159494166167813995}
-  animator: {fileID: 9027307285726867413}
-  joystick: {fileID: 37758624}
-  runSpeed: 20
 --- !u!61 &7998189622014987335
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -22884,20 +22850,13 @@ MonoBehaviour:
     m_Bits: 1024
   m_GroundCheck: {fileID: 4425651303727279832}
   animator: {fileID: 9027307285726867413}
+  joystick: {fileID: 37758624}
+  runSpeed: 20
+  attackTrigger: {fileID: 8070316246306322638}
+  attackTimer: 0.2
   OnLandEvent:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 6607501963812336939}
-        m_MethodName: Landing
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
     m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
 --- !u!95 &9027307285726867413

@@ -989,7 +989,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 3768692486498080204}
+      - m_Target: {fileID: 2216858884261404556}
         m_MethodName: Jump
         m_Mode: 1
         m_Arguments:
@@ -8080,8 +8080,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 7193489311274371119}
-        m_MethodName: ButtonClick
+      - m_Target: {fileID: 2216858884261404556}
+        m_MethodName: Attack
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -9106,10 +9106,10 @@ MonoBehaviour:
   m_Script: {fileID: 1980459831, guid: f70555f144d8491a825f0804e09c671c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_UiScaleMode: 0
+  m_UiScaleMode: 1
   m_ReferencePixelsPerUnit: 100
   m_ScaleFactor: 1
-  m_ReferenceResolution: {x: 800, y: 600}
+  m_ReferenceResolution: {x: 1280, y: 720}
   m_ScreenMatchMode: 0
   m_MatchWidthOrHeight: 0
   m_PhysicalUnit: 3
@@ -17060,20 +17060,13 @@ MonoBehaviour:
     m_Bits: 1024
   m_GroundCheck: {fileID: 5950547823433125439}
   animator: {fileID: 1349098549951303474}
+  joystick: {fileID: 612357870}
+  runSpeed: 20
+  attackTrigger: {fileID: 1861933097}
+  attackTimer: 0.2
   OnLandEvent:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 3768692486498080204}
-        m_MethodName: Landing
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
     m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
 --- !u!1 &3058721360015460318
@@ -17124,22 +17117,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &3768692486498080204
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7193489311274371117}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6af060fb3b46900468cc45440fbd64da, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  controller: {fileID: 2216858884261404556}
-  animator: {fileID: 1349098549951303474}
-  joystick: {fileID: 612357870}
-  runSpeed: 20
 --- !u!4 &4397885054776940943
 Transform:
   m_ObjectHideFlags: 0
@@ -17389,10 +17366,8 @@ GameObject:
   - component: {fileID: 72271774170442912}
   - component: {fileID: 7743762553281469616}
   - component: {fileID: 2216858884261404556}
-  - component: {fileID: 3768692486498080204}
   - component: {fileID: 1388748234}
   - component: {fileID: 7193489311274371118}
-  - component: {fileID: 7193489311274371119}
   m_Layer: 8
   m_Name: Player
   m_TagString: Player
@@ -17420,22 +17395,6 @@ MonoBehaviour:
   fullHeart: {fileID: 21300000, guid: 30c49dff41ae51e4da271592b6491dd0, type: 3}
   emptyHeart: {fileID: 21300004, guid: 30c49dff41ae51e4da271592b6491dd0, type: 3}
   livesToGive: 0
---- !u!114 &7193489311274371119
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7193489311274371117}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 38078602fc8a4cf4eadc5ed93d323a87, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  attackTrigger: {fileID: 1861933097}
-  animator: {fileID: 1349098549951303474}
-  attacking: 0
-  attackTimer: 0.2
 --- !u!111 &7193489311274371120
 Animation:
   m_ObjectHideFlags: 0

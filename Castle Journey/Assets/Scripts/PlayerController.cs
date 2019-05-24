@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.Events;
 using System.Collections;
+using System.Collections.Generic;
 
 public class PlayerController : MonoBehaviour
 {
@@ -10,6 +11,14 @@ public class PlayerController : MonoBehaviour
 	[SerializeField] private LayerMask m_WhatIsGround;						
 	[SerializeField] private Transform m_GroundCheck;
 	[SerializeField] private Animator animator;
+    [SerializeField] private Joystick joystick;
+    [SerializeField] private float runSpeed = 20f;
+    [SerializeField] private Collider2D attackTrigger;
+    [SerializeField] private float attackTimer = 0.2f;
+
+    private bool attacking = false;
+    private bool clicked = false;
+    private Enemy enemy;
 
     const float k_GroundedRadius = 1f; 
 	private bool m_Grounded;         
@@ -17,8 +26,11 @@ public class PlayerController : MonoBehaviour
 	private Rigidbody2D m_Rigidbody2D;
 	private bool m_FacingRight = true; 
 	private Vector3 m_Velocity = Vector3.zero;
+    private PlayerAttack p_Attack;
+    private float moveH = 0f;
+    private bool jump = false;
 
-	[Header("Events")]
+    [Header("Events")]
 	[Space]
 
 	public UnityEvent OnLandEvent;
@@ -36,14 +48,30 @@ public class PlayerController : MonoBehaviour
 				OnLandEvent = new UnityEvent();
 			}
 
-	}
+        p_Attack = GetComponent<PlayerAttack>();
+        enemy = FindObjectOfType<Enemy>();
+        attackTrigger.enabled = false;
+    }
 
-	private void FixedUpdate()
+    public void Attack()
+    {
+        clicked = true;
+    }
+
+    public void Jump()
+    {
+        jump = true;
+    }
+
+    private void FixedUpdate()
 	{
 		bool wasGrounded = m_Grounded;
 		m_Grounded = false;
 
-		Collider2D[] colliders = Physics2D.OverlapCircleAll(m_GroundCheck.position, k_GroundedRadius, m_WhatIsGround);
+       
+        
+
+        Collider2D[] colliders = Physics2D.OverlapCircleAll(m_GroundCheck.position, k_GroundedRadius, m_WhatIsGround);
 		for (int i = 0; i < colliders.Length; i++)
 		{
 			if (colliders[i].gameObject != gameObject)
@@ -57,7 +85,9 @@ public class PlayerController : MonoBehaviour
 					
 			}
 		}
-	}
+        Move(moveH * Time.fixedDeltaTime, jump);
+        jump = false;
+    }
 
 
 	public void Move(float move, bool jump)
@@ -101,6 +131,55 @@ public class PlayerController : MonoBehaviour
 			
 		}
 	}
+
+    void Update()
+    {
+        // moveH = Input.GetAxisRaw("Horizontal") * runSpeed ;
+        if (joystick.Horizontal >= .2f)
+        {
+            moveH = runSpeed;
+        }
+        else if (joystick.Horizontal <= -.2f)
+        {
+            moveH = -runSpeed;
+        }
+        else moveH = 0f;
+
+        animator.SetFloat("Speed", Mathf.Abs(moveH));
+
+        if (Input.GetButtonDown("Jump"))
+        {
+            jump = true;
+        }
+
+        if ((Input.GetButtonDown("Fire1") || clicked) && !attacking)
+        {
+            attacking = true;
+            attackTimer = 0.2f;
+            attackTrigger.enabled = true;
+            clicked = false;
+
+        }
+
+
+        if (attacking)
+        {
+            if (attackTimer > 0)
+            {
+                attackTimer -= Time.deltaTime;
+            }
+            else
+            {
+                attacking = false;
+                attackTrigger.enabled = false;
+
+            }
+        }
+
+        animator.SetBool("IsAttack", attacking);
+    }
+
+    
 
     public IEnumerator Knockback(float knockDur, float knockPwr, Vector3 knockDir)
     {
@@ -146,4 +225,14 @@ public class PlayerController : MonoBehaviour
 		theScale.x *= -1;
 		transform.localScale = theScale;
 	}
+
+    void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.tag == "Enemy")
+        {
+            enemy.Damage(1);
+            //StartCoroutine(enemy.Knockback(0.02f, 350, enemy.transform.position));
+            Debug.Log("Attacked");
+        }
+    }
 }
