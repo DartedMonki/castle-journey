@@ -2,15 +2,20 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
+
 
 public class Boss : MonoBehaviour
 {
     [SerializeField] private Transform groundedDetection;
-    [SerializeField] private float speed = 4;
+    [SerializeField] private float speed = 2;
     [SerializeField] private float distanceFromPlayer = 20;
     [SerializeField] private bool movingRight = true;
     [SerializeField] private bool facingRight = true;
     [SerializeField] private int health = 10;
+    [SerializeField] private int index = 4;
+    [SerializeField] private int kPower = 1000;
+
     private float timeDamage = 1.5f;
 
     [SerializeField] private Slider healthBar;
@@ -58,7 +63,7 @@ public class Boss : MonoBehaviour
         if (col.gameObject.tag.Equals("Player"))
         {
             p_health.Damage(1);
-            StartCoroutine(p_control.Knockback(0.02f, 350, p_control.transform.position));
+            StartCoroutine(p_control.Knockback(0.02f, kPower, p_control.transform.position));
             Debug.Log("Attacking");
         }
     }
@@ -82,6 +87,7 @@ public class Boss : MonoBehaviour
     public void Die()
     {
         gameObject.SetActive(false);
+        SceneManager.LoadScene(index);
         //p_score.AddScore(1000);
     }
 }

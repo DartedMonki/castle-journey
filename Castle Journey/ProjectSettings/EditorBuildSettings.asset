@@ -8,15 +8,18 @@ EditorBuildSettings:
   - enabled: 0
     path: 
     guid: 00000000000000000000000000000000
-  - enabled: 0
+  - enabled: 1
     path: Assets/Scenes/UI/Fix/MainMenu.unity
     guid: 640b4e650a461194ba22c70dc06c5ebc
-  - enabled: 0
+  - enabled: 1
     path: Assets/Scenes/World1.unity
     guid: 8241a008ff278bb47afd3d3722b91f9d
-  - enabled: 0
+  - enabled: 1
     path: Assets/Scenes/World2.unity
     guid: 6cddfd06a2c0c4540ba379af5c5675e1
+  - enabled: 1
+    path: Assets/Scenes/World3.unity
+    guid: 89154d23ee7d2ae4bbc4acc00ea27b84
   - enabled: 1
     path: Assets/Scenes/UI/Fix/EndGame.unity
     guid: 1e0fb7cd3786c9c4d80deeb7bae59fbb
