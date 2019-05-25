@@ -17,6 +17,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float runSpeed = 20f;
 
     private Enemy enemy;
+    private Boss boss;
     private Rigidbody2D m_Rigidbody2D;
     private Vector3 m_Velocity = Vector3.zero;
     private bool attacking = false;
@@ -47,6 +48,7 @@ public class PlayerController : MonoBehaviour
 			}
 
         enemy = FindObjectOfType<Enemy>();
+        boss = FindObjectOfType<Boss>();
         attackTrigger.enabled = false;
         Time.timeScale = 1f;
     }
@@ -230,6 +232,12 @@ public class PlayerController : MonoBehaviour
         {
             enemy.Damage(1);
             //StartCoroutine(enemy.Knockback(0.02f, 350, enemy.transform.position));
+            Debug.Log("Attacked");
+        }
+
+        if(collision.tag == "Boss")
+        {
+            boss.Damage(1);
             Debug.Log("Attacked");
         }
     }
