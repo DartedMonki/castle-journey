@@ -36,4 +36,25 @@ public class FacebookManager : MonoBehaviour
         else
             Debug.Log("Canceled Login");
     }
+
+    public void Share()
+    {
+        FB.ShareLink(contentTitle: "Castle Journey", contentURL:new System.Uri("https://github.com/DartedMonki/Castle_Journey"), contentDescription:"Here's a Description About Game", callback:OnShare);
+    }
+
+    private void OnShare(IShareResult result)
+    {
+        if(result.Cancelled || !string.IsNullOrEmpty(result.Error))
+        {
+            Debug.Log("ShareLink Error: " + result.Error);
+        }
+        else if (!string.IsNullOrEmpty(result.PostId))
+        {
+            Debug.Log(result.PostId);
+        }
+        else
+        {
+            Debug.Log("Share Succeed");
+        }
+    }
 }
