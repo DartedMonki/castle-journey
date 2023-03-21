@@ -10,7 +10,7 @@ Selamat datang di game terbaru kami: sebuah platformer 2D yang seru untuk perang
 
 Want to contribute? Great!
 
-Castle Journey uses Unity 2018.3.6f1 for development.
+Castle Journey uses Unity 2018.4.36f1 for development.
 
 Open your favorite Terminal and run this command.
 ```sh
