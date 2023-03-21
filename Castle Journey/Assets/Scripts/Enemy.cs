@@ -40,30 +40,7 @@ public class Enemy : MonoBehaviour
         {
             Die();
         }
-            //RaycastHit2D groundInfo = Physics2D.Raycast(groundedDetection.position, Vector2.down, raydistance);
-            //if(groundInfo.collider == false)
-
         }
-        //else
-        //{
-            //transform.Translate(Vector2.left * speed * Time.deltaTime);
-            //RaycastHit2D groundInfo = Physics2D.Raycast(groundedDetection.position, Vector2.down, raydistance);
-            //if (groundInfo.collider == false)
-            //{
-               // if (movingRight == true)
-               // {
-               //     transform.eulerAngles = new Vector3(0, -180, 0);
-               //     movingRight = false;
-               //     facingRight = false;
-               // }
-               // else
-               // {
-               //     transform.eulerAngles = new Vector3(0, 0, 0);
-               //     movingRight = true;
-               //     facingRight = true;
-               // }
-           // }   
-        //}
         anim.SetFloat("Speed", Mathf.Abs(speed));
     }
 
@@ -73,8 +50,11 @@ public class Enemy : MonoBehaviour
         if (col.gameObject.tag.Equals("Player"))
         {
             anim.SetBool("IsAttack", true);
-            p_health.Damage(1);
-            StartCoroutine(p_control.Knockback(0.02f, 350, p_control.transform.position));
+            if (!p_health.isInvincible)
+            {
+                p_health.Damage(1);
+                StartCoroutine(p_control.Knockback(0.02f, 350, p_control.transform.position));
+            }
             Debug.Log("Attacking");
         }
         else anim.SetBool("IsAttack", false);

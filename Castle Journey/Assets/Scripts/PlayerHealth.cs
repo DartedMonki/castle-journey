@@ -17,6 +17,10 @@ public class PlayerHealth : MonoBehaviour
     public GameObject gameCanvas;
     //nyalain
     public GameObject endgameCanvas;
+    public bool isInvincible = false;
+    [SerializeField] private Animator animator;
+    private bool attacked = false;
+    [SerializeField] private float attackedTimer = 0.025f;
 
     // Start is called before the first frame update
     void Start()
@@ -52,6 +56,19 @@ public class PlayerHealth : MonoBehaviour
                 Hearts[i].enabled = false;
             }
         }
+        if (attacked)
+        {
+            if(attackedTimer > 0)
+            {
+                attackedTimer -= Time.deltaTime;
+            }
+            else
+            {
+                attacked = false;
+            }
+        }
+        
+        animator.SetBool("IsAttacked", attacked);
 
     }
 
@@ -62,8 +79,12 @@ public class PlayerHealth : MonoBehaviour
 
     public void Damage(int dmg)
     {
-        Health -= dmg;
-        gameObject.GetComponent<Animation>().Play("PlayerAttackedRed");
+        if (!isInvincible)
+        {
+            Health -= dmg;
+            attacked = true;
+            attackedTimer = 0.2f;
+        }
     }
 
     void Die()

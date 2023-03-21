@@ -19,6 +19,7 @@ public class Boss : MonoBehaviour
     private float timeDamage = 1.5f;
 
     [SerializeField] private Slider healthBar;
+    [SerializeField] private Score score;
     private PlayerController p_control;
     private PlayerHealth p_health;
     private Transform target;
@@ -62,8 +63,11 @@ public class Boss : MonoBehaviour
     {
         if (col.gameObject.tag.Equals("Player"))
         {
-            p_health.Damage(1);
-            StartCoroutine(p_control.Knockback(0.02f, kPower, p_control.transform.position));
+            if (!p_health.isInvincible) 
+            {
+                p_health.Damage(1);
+                StartCoroutine(p_control.Knockback(0.02f, kPower, p_control.transform.position));
+            }
             Debug.Log("Attacking");
         }
     }
@@ -80,14 +84,13 @@ public class Boss : MonoBehaviour
     public void Damage(int dmg)
     {
         health -= dmg;
-        //gameObject.GetComponent<Animation>().Play("ThiefAttackedRed");
-
     }
 
     public void Die()
     {
         gameObject.SetActive(false);
+        score.AddScore(1000);
+        StaticClass.PreviousScore = score.score;
         SceneManager.LoadScene(index);
-        //p_score.AddScore(1000);
     }
 }

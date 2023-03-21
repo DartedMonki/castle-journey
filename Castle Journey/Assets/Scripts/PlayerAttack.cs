@@ -65,7 +65,6 @@ public class PlayerAttack : MonoBehaviour
         if (collision.tag == "Enemy")
         {
             enemy.Damage(1);
-            //StartCoroutine(enemy.Knockback(0.02f, 350, enemy.transform.position));
             Debug.Log("Attacked");
         }
     }

@@ -14,6 +14,7 @@ public class Score : MonoBehaviour
     void Start()
     {
         scoreText.text = "SCORE";
+        score = StaticClass.PreviousScore;
     }
 
     // Update is called once per frame

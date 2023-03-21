@@ -19,3 +19,5 @@ $ git clone https://github.com/DartedMonki/castle-journey.git
 Open Unity3D.
 
 Open the game project folder.
+
+Open Assets > Scenes > UI then load the MainMenu.
