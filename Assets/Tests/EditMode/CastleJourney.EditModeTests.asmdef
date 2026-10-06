@@ -1,0 +1,7 @@
+{
+  "name": "CastleJourney.EditModeTests",
+  "references": ["UnityEngine.UI", "Cinemachine"],
+  "includePlatforms": ["Editor"],
+  "optionalUnityReferences": ["TestAssemblies"],
+  "autoReferenced": false
+}

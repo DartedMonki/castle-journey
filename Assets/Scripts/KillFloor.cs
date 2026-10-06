@@ -9,8 +9,8 @@ public class KillFloor : MonoBehaviour
 
 	void Start()
 	{
-        health = FindObjectOfType<PlayerHealth>();
-        enemy = FindObjectOfType<Enemy>();
+        health = FindFirstObjectByType<PlayerHealth>();
+        enemy = FindFirstObjectByType<Enemy>();
 	}
 
     private void OnTriggerEnter2D(Collider2D collision)

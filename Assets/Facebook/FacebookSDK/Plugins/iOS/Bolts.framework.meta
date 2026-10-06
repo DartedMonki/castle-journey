@@ -1,24 +1,20 @@
 fileFormatVersion: 2
 guid: c476164be0b9d1e4c806e476ebe1e92e
-folderAsset: yes
 PluginImporter:
   externalObjects: {}
-  serializedVersion: 2
+  serializedVersion: 3
   iconMap: {}
   executionOrder: {}
   defineConstraints: []
   isPreloaded: 0
   isOverridable: 0
   isExplicitlyReferenced: 0
+  validateReferences: 1
   platformData:
-  - first:
-      Any: 
-    second:
+    Any:
       enabled: 1
       settings: {}
-  - first:
-      Editor: Editor
-    second:
+    Editor:
       enabled: 0
       settings:
         DefaultValueInitialized: true

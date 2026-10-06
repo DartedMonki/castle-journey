@@ -5,11 +5,15 @@ public class FixedJoystick : Joystick
 {
     Vector2 joystickPosition = Vector2.zero;
     PointerEventData TempPED; // TempPointerEventData: This keeps track of the position where the touch event occured.
-    private Camera cam = new Camera();
+    private Camera cam;
     private bool _IsPressed = false;
 
     void Start()
     {
+        Canvas canvas = GetComponentInParent<Canvas>();
+        cam = canvas != null && canvas.renderMode != RenderMode.ScreenSpaceOverlay
+            ? canvas.worldCamera
+            : null;
         joystickPosition = RectTransformUtility.WorldToScreenPoint(cam, handle.position);
     }
 

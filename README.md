@@ -10,7 +10,8 @@ Selamat datang di game terbaru kami: sebuah platformer 2D yang seru untuk perang
 
 Want to contribute? Great!
 
-Castle Journey uses Unity 2018.4.36f1 for development.
+Castle Journey uses **Unity 6000.6.4f1** for development. The project retains the
+Built-in Render Pipeline, legacy input, and Cinemachine 2 cameras.
 
 Open your favorite Terminal and run this command.
 ```sh
@@ -21,3 +22,22 @@ Open Unity3D.
 Open the game project folder.
 
 Open Assets > Scenes > UI then load the MainMenu.
+
+With the Unity CLI installed:
+
+```sh
+unity open . --editor-version 6000.6.4f1
+```
+
+Run regression tests with the project editor closed:
+
+```sh
+unity test . --mode EditMode --output Builds/Validation/editmode-results.xml
+unity test . --mode PlayMode --output Builds/Validation/playmode-results.xml
+```
+
+The editor also provides **Castle Journey > Validate Project**. Save open scenes
+and stop Play mode before using it.
+
+See [the Unity 6 migration notes](docs/UNITY6_MIGRATION.md) for package pins,
+build commands, Android setup, and remaining device/service verification.

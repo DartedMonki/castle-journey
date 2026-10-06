@@ -16,7 +16,7 @@ public class PlayerAttack : MonoBehaviour
 
     private void Start()
     {
-        enemy = FindObjectOfType<Enemy>();
+        enemy = FindFirstObjectByType<Enemy>();
     }
 
     public void ButtonClick()

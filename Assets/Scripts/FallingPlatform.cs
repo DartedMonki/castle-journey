@@ -25,7 +25,7 @@ public class FallingPlatform : MonoBehaviour
     IEnumerator fall()
     {
         yield return new WaitForSeconds(falldelay);
-        rb.isKinematic = false;
+        rb.bodyType = RigidbodyType2D.Dynamic;
         //GetComponent<Collider2D>().isTrigger = true;
         yield return 0;
     }

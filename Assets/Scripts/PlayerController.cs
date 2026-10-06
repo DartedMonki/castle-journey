@@ -47,8 +47,8 @@ public class PlayerController : MonoBehaviour
 				OnLandEvent = new UnityEvent();
 			}
 
-        enemy = FindObjectOfType<Enemy>();
-        boss = FindObjectOfType<Boss>();
+        enemy = FindFirstObjectByType<Enemy>();
+        boss = FindFirstObjectByType<Boss>();
         attackTrigger.enabled = false;
         Time.timeScale = 1f;
     }
@@ -79,7 +79,7 @@ public class PlayerController : MonoBehaviour
 				m_Grounded = true;
 				
 
-				if ((!wasGrounded && m_Rigidbody2D.velocity.y < 0) )
+				if ((!wasGrounded && m_Rigidbody2D.linearVelocity.y < 0) )
 					OnLandEvent.Invoke();
 					animator.SetBool("IsJumping", !m_Grounded);
 					
@@ -98,9 +98,9 @@ public class PlayerController : MonoBehaviour
 		if (m_Grounded || m_AirControl)
 		{
 
-			Vector3 targetVelocity = new Vector2(move * 10f, m_Rigidbody2D.velocity.y);
+			Vector3 targetVelocity = new Vector2(move * 10f, m_Rigidbody2D.linearVelocity.y);
 
-			m_Rigidbody2D.velocity = Vector3.SmoothDamp(m_Rigidbody2D.velocity, targetVelocity, ref m_Velocity, m_MovementSmoothing);
+			m_Rigidbody2D.linearVelocity = Vector3.SmoothDamp(m_Rigidbody2D.linearVelocity, targetVelocity, ref m_Velocity, m_MovementSmoothing);
 
 			if (move > 0 && !m_FacingRight)
 			{
@@ -123,7 +123,7 @@ public class PlayerController : MonoBehaviour
 			if(m_Grounded || m_Doublejump < 2)
 			{
 				
-				m_Rigidbody2D.velocity = new Vector2(m_Rigidbody2D.velocity.x,0);
+				m_Rigidbody2D.linearVelocity = new Vector2(m_Rigidbody2D.linearVelocity.x,0);
 				m_Rigidbody2D.AddForce(new Vector2(0f, m_JumpForce));
 				m_Doublejump += 1;
 				m_Grounded = false;
@@ -184,7 +184,7 @@ public class PlayerController : MonoBehaviour
     public IEnumerator Knockback(float knockDur, float knockPwr, Vector3 knockDir)
     {
         float timer = 0;
-        m_Rigidbody2D.velocity = new Vector2(m_Rigidbody2D.velocity.x, 0);
+        m_Rigidbody2D.linearVelocity = new Vector2(m_Rigidbody2D.linearVelocity.x, 0);
         while (knockDur > timer)
         {
             timer += Time.deltaTime;

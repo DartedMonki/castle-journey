@@ -20,9 +20,9 @@ public class Enemy : MonoBehaviour
     {
         anim = GetComponent<Animator>();
         target = GameObject.FindGameObjectWithTag("Player").transform;
-        p_health = FindObjectOfType<PlayerHealth>();
-        p_control = FindObjectOfType<PlayerController>();
-        p_score = FindObjectOfType<Score>();
+        p_health = FindFirstObjectByType<PlayerHealth>();
+        p_control = FindFirstObjectByType<PlayerController>();
+        p_score = FindFirstObjectByType<Score>();
     }
 
     // Update is called once per frame

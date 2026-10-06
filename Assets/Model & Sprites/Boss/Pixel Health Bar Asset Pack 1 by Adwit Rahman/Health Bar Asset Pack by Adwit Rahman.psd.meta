@@ -1,15 +1,27 @@
 fileFormatVersion: 2
 guid: d49ee2a54fae868479c29930178840a8
 TextureImporter:
-  fileIDToRecycleName:
-    21300000: Health Bar Asset Pack by Adwit Rahman_0
-    21300002: Health Bar Asset Pack by Adwit Rahman_1
-    21300004: Health Bar Asset Pack by Adwit Rahman_2
-    21300006: Health Bar Asset Pack by Adwit Rahman_3
-    21300008: Health Bar Asset Pack by Adwit Rahman_4
-    21300010: Health Bar Asset Pack by Adwit Rahman_5
+  internalIDToNameTable:
+  - first:
+      213: 21300000
+    second: Health Bar Asset Pack by Adwit Rahman_0
+  - first:
+      213: 21300002
+    second: Health Bar Asset Pack by Adwit Rahman_1
+  - first:
+      213: 21300004
+    second: Health Bar Asset Pack by Adwit Rahman_2
+  - first:
+      213: 21300006
+    second: Health Bar Asset Pack by Adwit Rahman_3
+  - first:
+      213: 21300008
+    second: Health Bar Asset Pack by Adwit Rahman_4
+  - first:
+      213: 21300010
+    second: Health Bar Asset Pack by Adwit Rahman_5
   externalObjects: {}
-  serializedVersion: 9
+  serializedVersion: 13
   mipmaps:
     mipMapMode: 0
     enableMipMap: 0
@@ -26,9 +38,12 @@ TextureImporter:
     externalNormalMap: 0
     heightScale: 0.25
     normalMapFilter: 0
+    flipGreenChannel: 0
   isReadable: 0
   streamingMipmaps: 0
   streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
   grayScaleToAlpha: 0
   generateCubemap: 6
   cubemapConvolution: 0
@@ -38,8 +53,8 @@ TextureImporter:
   textureSettings:
     serializedVersion: 2
     filterMode: 0
-    aniso: -1
-    mipBias: -100
+    aniso: 1
+    mipBias: 0
     wrapU: 1
     wrapV: 1
     wrapW: 1
@@ -56,15 +71,23 @@ TextureImporter:
   spriteGenerateFallbackPhysicsShape: 1
   alphaUsage: 1
   alphaIsTransparency: 1
+  spriteTessellationMethod: 0
   spriteTessellationDetail: -1
+  spriteGeometrySubdivision: -1
   textureType: 8
   textureShape: 1
   singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
   maxTextureSizeSet: 0
   compressionQualitySet: 0
   textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 1
+  swizzle: 50462976
+  cookieLightType: 1
   platformSettings:
-  - serializedVersion: 2
+  - serializedVersion: 4
     buildTarget: DefaultTexturePlatform
     maxTextureSize: 2048
     resizeAlgorithm: 0
@@ -74,8 +97,10 @@ TextureImporter:
     crunchedCompression: 0
     allowsAlphaSplitting: 0
     overridden: 0
+    ignorePlatformSupport: 0
     androidETC2FallbackOverride: 0
-  - serializedVersion: 2
+    forceMaximumCompressionQuality_BC6H_BC7: 1
+  - serializedVersion: 4
     buildTarget: Standalone
     maxTextureSize: 2048
     resizeAlgorithm: 0
@@ -85,8 +110,10 @@ TextureImporter:
     crunchedCompression: 0
     allowsAlphaSplitting: 0
     overridden: 0
+    ignorePlatformSupport: 0
     androidETC2FallbackOverride: 0
-  - serializedVersion: 2
+    forceMaximumCompressionQuality_BC6H_BC7: 1
+  - serializedVersion: 4
     buildTarget: Android
     maxTextureSize: 2048
     resizeAlgorithm: 0
@@ -96,7 +123,22 @@ TextureImporter:
     crunchedCompression: 0
     allowsAlphaSplitting: 0
     overridden: 0
+    ignorePlatformSupport: 0
     androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 1
+  - serializedVersion: 4
+    buildTarget: WebGL
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 1
   spriteSheet:
     serializedVersion: 2
     sprites:
@@ -111,11 +153,13 @@ TextureImporter:
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
       spriteID: d4bcccc765461284d94b147570b7f791
+      internalID: 21300000
       vertices: []
       indices: 
       edges: []
@@ -131,11 +175,13 @@ TextureImporter:
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
       spriteID: 91eaacba582626f41977ecd7c4059b63
+      internalID: 21300002
       vertices: []
       indices: 
       edges: []
@@ -151,11 +197,13 @@ TextureImporter:
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
       spriteID: 56fdf2eb00ac56d48b6f5c2966cf7136
+      internalID: 21300004
       vertices: []
       indices: 
       edges: []
@@ -171,11 +219,13 @@ TextureImporter:
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
       spriteID: f982f6f4ec8997947bb945f15b6e782d
+      internalID: 21300006
       vertices: []
       indices: 
       edges: []
@@ -191,11 +241,13 @@ TextureImporter:
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
       spriteID: a0f316411acf75746b70bec45777407c
+      internalID: 21300008
       vertices: []
       indices: 
       edges: []
@@ -211,26 +263,39 @@ TextureImporter:
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
       spriteID: cc58c9d4622997745bae8bcc0e00c63c
+      internalID: 21300010
       vertices: []
       indices: 
       edges: []
       weights: []
     outline: []
+    customData: 
     physicsShape: []
     bones: []
     spriteID: 83b398141e4ec3840a12184dd2dc76c9
+    internalID: 0
     vertices: []
     indices: 
     edges: []
     weights: []
-  spritePackingTag: 
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      Health Bar Asset Pack by Adwit Rahman_0: 21300000
+      Health Bar Asset Pack by Adwit Rahman_1: 21300002
+      Health Bar Asset Pack by Adwit Rahman_2: 21300004
+      Health Bar Asset Pack by Adwit Rahman_3: 21300006
+      Health Bar Asset Pack by Adwit Rahman_4: 21300008
+      Health Bar Asset Pack by Adwit Rahman_5: 21300010
+  mipmapLimitGroupName: 
   pSDRemoveMatte: 0
-  pSDShowRemoveMatteOption: 1
   userData: 
   assetBundleName: 
   assetBundleVariant: 

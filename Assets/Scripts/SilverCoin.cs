@@ -10,7 +10,7 @@ public class SilverCoin : MonoBehaviour
     // Use this for initialization
 	void Start()
 	{
-        score = FindObjectOfType<Score>();
+        score = FindFirstObjectByType<Score>();
 	}
 
     private void OnTriggerEnter2D(Collider2D collision)

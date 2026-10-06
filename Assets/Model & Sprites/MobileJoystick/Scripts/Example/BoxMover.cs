@@ -12,9 +12,9 @@ namespace DitzeGames.MobileJoystick.Example
     // Use this for initialization
     void Awake ()
     {
-        Joystick = FindObjectOfType<Joystick>();
-        Button = FindObjectOfType<Button>();
-        TouchField = FindObjectOfType<TouchField>();
+        Joystick = FindFirstObjectByType<Joystick>();
+        Button = FindFirstObjectByType<Button>();
+        TouchField = FindFirstObjectByType<TouchField>();
     }
 	
 	// Update is called once per frame

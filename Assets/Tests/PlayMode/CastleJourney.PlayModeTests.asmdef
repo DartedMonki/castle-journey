@@ -1,0 +1,6 @@
+{
+  "name": "CastleJourney.PlayModeTests",
+  "references": ["UnityEngine.UI", "Cinemachine"],
+  "optionalUnityReferences": ["TestAssemblies"],
+  "autoReferenced": false
+}

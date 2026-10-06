@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using Facebook.Unity;
 using UnityEngine.UI;
-using System.Collections.Generic;
 
 public class FacebookManager : MonoBehaviour
 {

@@ -25,8 +25,10 @@ public class Loader : MonoBehaviour
         
         //fungsi ngaktifin
         menuCanvas.SetActive(false);
-        menuBG.SetActive(false);
-        partikel.SetActive(false);
+        if (menuBG != null)
+            menuBG.SetActive(false);
+        if (partikel != null)
+            partikel.SetActive(false);
         loadingCanvas.SetActive(true);
         loadBG.SetActive(true);
 
