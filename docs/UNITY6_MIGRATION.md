@@ -1,11 +1,14 @@
 # Unity 6 Migration
 
+The first migration preserved legacy systems as a compatibility baseline.
+The current project supersedes that baseline with URP, Input System, and
+Cinemachine 6.6. See [Unity 6 Modernization](UNITY6_MODERNIZATION.md).
+
 ## Editor
 
 - Original version: Unity 2018.4.36f1, Git revision `314eff5`.
 - Target: Unity 6000.6.4f1 (`12bfff696524`).
-- Keep the Built-in Render Pipeline and Input Manager. Do not switch to URP or
-  the new Input System as part of this migration.
+- Use the checked-in URP 2D assets and Input System action asset in `Assets/Settings`.
 - Enabled build scene indices remain MainMenu (0), World1 (1), World2 (2),
   World3 (3), and EndGame (4).
 - Open `Assets/Scenes/UI/MainMenu.unity` to play.
@@ -16,18 +19,20 @@
 
 | Package | Version | Purpose |
 | --- | --- | --- |
-| Cinemachine | 2.10.7 | Preserve existing cameras and their serialized references |
+| Cinemachine | 6.6.0 | Modernized camera components and target tracking |
+| Input System | 1.20.0 | Gameplay actions, UI navigation, and touch input |
+| Universal RP | 17.6.0 | 2D Renderer and unlit sprite materials |
 | uGUI | 2.6.0 | Legacy Canvas UI and bundled TextMesh Pro |
 | 2D Sprite / Tilemap Editor | 1.0.0 | Sprite slicing and tile editing |
 | Test Framework | 1.8.0 | Edit Mode and Play Mode regression tests |
 | External Dependency Manager | 2.1.0 | Replace the incompatible 1.2.95 Android/iOS resolver |
 | Unity Pipeline | 0.8.0-exp.1 | Live Unity CLI integration |
 
-Unity 6000.6 bundles a newer Cinemachine and can resolve it instead of a numeric
-2.x dependency. The official 2.10.7 archive is therefore checked in as
-`Packages/com.unity.cinemachine-2.10.7.tgz`, referenced with a relative `file:`
-dependency. Keep that archive and `Packages/packages-lock.json` in source control.
-The validator rejects an unexpected Cinemachine version.
+Unity 6000.6's bundled Cinemachine is used directly. The old 2.10.7 archive at
+`Legacy/com.unity.cinemachine-2.10.7.tgz` is only a historical migration backup
+and is no longer a package dependency.
+Keep `Packages/packages-lock.json` in source control. The validator checks the
+supported Cinemachine version, URP configuration, and new input backend.
 
 Archive SHA-256:
 `f409347e3c19d2cb7a783664fec2df262c09ce0596b13c04a79aebbcbcf894c1`.
@@ -42,9 +47,8 @@ resolver is retained, inactive, under `Legacy/PlayServicesResolver`.
 - Unity upgraded asset/importer serialization while retaining asset GUIDs and
   sprite references.
 - Rigidbody2D velocity and falling-platform body type use the supported APIs.
-- Sorted object lookups retain legacy first-match behavior. Unity 6000.6 warns
-  that these APIs are deprecated, but changing to arbitrary-match lookups could
-  change which enemy the original combat code selects.
+- Singleton player/score lookups use the supported unsorted APIs. Combat and
+  kill-floor damage target the actual contacted enemy, not the first enemy found.
 - The fixed joystick uses its Canvas camera, or null for overlay UI, instead of
   constructing an invalid Camera component.
 - The menu loader tolerates the intentionally unassigned background/particle
@@ -89,7 +93,7 @@ and the migration's isolated validation project are ignored by Git.
 
 Edit Mode coverage includes all five build scenes, missing scripts, serialized
 references, button callback methods, game prefab scripts, camera targets, tile
-sprites, scene order, legacy input, physics timing, and the Cinemachine pin.
+  sprites, scene order, input actions, physics timing, and the Cinemachine version.
 Play Mode coverage includes the start button's asynchronous scene load, all
 three worlds, joystick movement, jump, attack timing, score, health, pause/resume,
 death UI, and carried end-game score.

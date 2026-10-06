@@ -1,56 +1,50 @@
-﻿using UnityEngine;
+using UnityEngine;
 using UnityEngine.EventSystems;
 
 namespace DitzeGames.MobileJoystick
 {
-    /// <summary>
-    /// Put it on any Image UI Element
-    /// </summary>
-    public class TouchField : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
+    public class TouchField : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, IDragHandler
     {
-        [HideInInspector]
-        public Vector2 TouchDist;
-        [HideInInspector]
-        protected Vector2 PointerOld;
-        [HideInInspector]
-        protected int PointerId;
-        [HideInInspector]
-        public bool Pressed;
+        [HideInInspector] public Vector2 TouchDist;
+        [HideInInspector] protected Vector2 PointerOld;
+        [HideInInspector] protected int PointerId;
+        [HideInInspector] public bool Pressed;
+        private Vector2 pendingDelta;
 
-        // Update is called once per frame
-        void Update()
+        private void Update()
         {
-            if (Pressed)
-            {
-                if (PointerId >= 0 && PointerId < Input.touches.Length)
-                {
-                    TouchDist = Input.touches[PointerId].position - PointerOld;
-                    PointerOld = Input.touches[PointerId].position;
-                }
-                else
-                {
-                    TouchDist = new Vector2(Input.mousePosition.x, Input.mousePosition.y) - PointerOld;
-                    PointerOld = Input.mousePosition;
-                }
-            }
-            else
-            {
-                TouchDist = new Vector2();
-            }
+            TouchDist = pendingDelta;
+            pendingDelta = Vector2.zero;
         }
 
         public void OnPointerDown(PointerEventData eventData)
         {
+            if (Pressed)
+                return;
             Pressed = true;
             PointerId = eventData.pointerId;
             PointerOld = eventData.position;
         }
 
+        public void OnDrag(PointerEventData eventData)
+        {
+            if (!Pressed || eventData.pointerId != PointerId)
+                return;
+            pendingDelta += eventData.position - PointerOld;
+            PointerOld = eventData.position;
+        }
 
         public void OnPointerUp(PointerEventData eventData)
         {
-            Pressed = false;
+            if (eventData.pointerId == PointerId)
+                OnDisable();
         }
 
+        private void OnDisable()
+        {
+            Pressed = false;
+            TouchDist = Vector2.zero;
+            pendingDelta = Vector2.zero;
+        }
     }
 }

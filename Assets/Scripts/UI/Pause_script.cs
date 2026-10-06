@@ -1,6 +1,8 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
+using UnityEngine.UI;
 
 public class Pause_script : MonoBehaviour
 {
@@ -16,6 +18,7 @@ public class Pause_script : MonoBehaviour
         pauseMenuUI.SetActive(false);
         //music.SetActive(true);
         Time.timeScale = 1f;
+        EventSystem.current?.SetSelectedGameObject(null);
         //GameIsPaused = false;
     }
 
@@ -25,6 +28,10 @@ public class Pause_script : MonoBehaviour
         //music.SetActive(false);
         pauseMenuUI.SetActive(true);
         Time.timeScale = 0f;
+        var resume = pauseMenuUI.GetComponentsInChildren<Button>(false);
+        var button = System.Array.Find(resume, item => item.name.Contains("Resume"));
+        if (button != null)
+            EventSystem.current?.SetSelectedGameObject(button.gameObject);
         //GameIsPaused = true;
     }
 }

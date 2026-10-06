@@ -27,8 +27,8 @@ public class Boss : MonoBehaviour
     void Start()
     {
         target = GameObject.FindGameObjectWithTag("Player").transform;
-        p_health = FindFirstObjectByType<PlayerHealth>();
-        p_control = FindFirstObjectByType<PlayerController>();
+        p_health = FindAnyObjectByType<PlayerHealth>();
+        p_control = FindAnyObjectByType<PlayerController>();
 
     }
     // Update is called once per frame

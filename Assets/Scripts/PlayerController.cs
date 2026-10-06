@@ -1,243 +1,241 @@
-﻿using UnityEngine;
-using UnityEngine.Events;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.Events;
 
+[RequireComponent(typeof(Rigidbody2D), typeof(GameplayInput))]
 public class PlayerController : MonoBehaviour
 {
-	[SerializeField] private LayerMask m_WhatIsGround;						
-	[SerializeField] private Transform m_GroundCheck;
-	[SerializeField] private Animator animator;
+    [Header("References")]
+    [SerializeField] private LayerMask m_WhatIsGround;
+    [SerializeField] private Transform m_GroundCheck;
+    [SerializeField] private Animator animator;
     [SerializeField] private Joystick joystick;
     [SerializeField] private Collider2D attackTrigger;
-    [SerializeField] private float attackTimer = 0.2f;
-    [SerializeField] private bool m_AirControl = false;
-    [SerializeField] private float m_JumpForce = 400f;
-    [Range(0, .3f)] [SerializeField] private float m_MovementSmoothing = .05f;
-    [SerializeField] private float runSpeed = 20f;
 
-    private Enemy enemy;
-    private Boss boss;
-    private Rigidbody2D m_Rigidbody2D;
-    private Vector3 m_Velocity = Vector3.zero;
-    private bool attacking = false;
-    private bool clicked = false;
-    const float k_GroundedRadius = 1f; 
-	private bool m_Grounded;         
-	private int m_Doublejump;           
-	private bool m_FacingRight = true; 
-    private float moveH = 0f;
-    private bool jump = false;
+    [Header("Movement")]
+    [Tooltip("Maximum horizontal speed in world units per second.")]
+    [Min(0f)] [SerializeField] private float runSpeed = 6.5f;
+    [Min(0f)] [SerializeField] private float jumpSpeed = 12f;
+    [Range(0f, .3f)] [SerializeField] private float m_MovementSmoothing = .05f;
+    [SerializeField] private bool m_AirControl = true;
+    [Range(.01f, .2f)] [SerializeField] private float groundProbeDistance = .08f;
+    [Min(0f)] [SerializeField] private float coyoteTime = .1f;
+    [Min(0f)] [SerializeField] private float jumpBufferTime = .12f;
+    [Range(0f, .9f)] [SerializeField] private float joystickDeadZone = .15f;
+    [Min(.01f)] [SerializeField] private float attackDuration = .2f;
 
     [Header("Events")]
-	[Space]
+    public UnityEvent OnLandEvent = new UnityEvent();
 
-	public UnityEvent OnLandEvent;
-	
-	[System.Serializable]
-	public class BoolEvent : UnityEvent<bool> { }
+    [System.Serializable]
+    public class BoolEvent : UnityEvent<bool> { }
 
+    private readonly RaycastHit2D[] groundHits = new RaycastHit2D[16];
+    private readonly HashSet<Component> attackHits = new HashSet<Component>();
+    private Rigidbody2D m_Rigidbody2D;
+    private Collider2D bodyCollider;
+    private GameplayInput input;
+    private float smoothingVelocity;
+    private float moveH;
+    private float jumpBufferedUntil = float.NegativeInfinity;
+    private float lastGroundedTime = float.NegativeInfinity;
+    private float knockbackUntil;
+    private float attackTimer;
+    private bool attacking;
+    private bool clicked;
+    private bool m_Grounded;
+    private int jumpsUsed;
+    private bool m_FacingRight = true;
+    private ContactFilter2D groundFilter;
+    private Vector2 groundVelocity;
+    private float ignoreGroundUntil;
 
-	private void Awake()
-	{
-		m_Rigidbody2D = GetComponent<Rigidbody2D>();
-
-		if (OnLandEvent == null)
-			{
-				OnLandEvent = new UnityEvent();
-			}
-
-        enemy = FindFirstObjectByType<Enemy>();
-        boss = FindFirstObjectByType<Boss>();
-        attackTrigger.enabled = false;
-        Time.timeScale = 1f;
+    private void Awake()
+    {
+        m_Rigidbody2D = GetComponent<Rigidbody2D>();
+        input = GetComponent<GameplayInput>();
+        groundFilter = new ContactFilter2D { useTriggers = false };
+        foreach (var collider in GetComponents<Collider2D>())
+            if (!collider.isTrigger)
+            {
+                bodyCollider = collider;
+                break;
+            }
+        if (OnLandEvent == null)
+            OnLandEvent = new UnityEvent();
+        if (attackTrigger != null)
+            attackTrigger.enabled = false;
     }
 
     public void Attack()
     {
-        clicked = true;
+        if (Time.timeScale > 0f)
+            clicked = true;
     }
 
     public void Jump()
     {
-        jump = true;
+        if (Time.timeScale > 0f)
+            jumpBufferedUntil = Time.time + jumpBufferTime;
+    }
+
+    private void Update()
+    {
+        if (Time.timeScale == 0f)
+        {
+            moveH = 0f;
+            clicked = false;
+            jumpBufferedUntil = float.NegativeInfinity;
+            return;
+        }
+        var touchAxis = joystick != null ? joystick.Horizontal : 0f;
+        moveH = Mathf.Abs(touchAxis) >= joystickDeadZone ? touchAxis : input.Horizontal;
+        moveH = Mathf.Clamp(moveH, -1f, 1f);
+        if (input.JumpPressed)
+            Jump();
+        if (input.AttackPressed)
+            Attack();
+
+        if (clicked && !attacking)
+        {
+            attacking = true;
+            attackTimer = attackDuration;
+            attackHits.Clear();
+            if (attackTrigger != null)
+                attackTrigger.enabled = true;
+        }
+        clicked = false;
+        if (attacking)
+        {
+            attackTimer -= Time.deltaTime;
+            if (attackTimer <= 0f)
+            {
+                attacking = false;
+                if (attackTrigger != null)
+                    attackTrigger.enabled = false;
+            }
+        }
+        if (animator != null)
+        {
+            animator.SetFloat("Speed", Mathf.Abs(m_Rigidbody2D.linearVelocity.x - groundVelocity.x));
+            animator.SetBool("IsAttack", attacking);
+            animator.SetBool("IsJumping", !m_Grounded);
+        }
     }
 
     private void FixedUpdate()
-	{
-		bool wasGrounded = m_Grounded;
-		m_Grounded = false;
-
-       
-        
-
-        Collider2D[] colliders = Physics2D.OverlapCircleAll(m_GroundCheck.position, k_GroundedRadius, m_WhatIsGround);
-		for (int i = 0; i < colliders.Length; i++)
-		{
-			if (colliders[i].gameObject != gameObject)
-			{
-				m_Grounded = true;
-				
-
-				if ((!wasGrounded && m_Rigidbody2D.linearVelocity.y < 0) )
-					OnLandEvent.Invoke();
-					animator.SetBool("IsJumping", !m_Grounded);
-					
-			}
-		}
-        Move(moveH * Time.fixedDeltaTime, jump);
-        jump = false;
-    }
-
-
-	public void Move(float move, bool jump)
-	{
-		if (m_Grounded == false)
-		animator.SetBool("IsJumping", true);
-		
-		if (m_Grounded || m_AirControl)
-		{
-
-			Vector3 targetVelocity = new Vector2(move * 10f, m_Rigidbody2D.linearVelocity.y);
-
-			m_Rigidbody2D.linearVelocity = Vector3.SmoothDamp(m_Rigidbody2D.linearVelocity, targetVelocity, ref m_Velocity, m_MovementSmoothing);
-
-			if (move > 0 && !m_FacingRight)
-			{
-				Flip();
-			}
-	
-			else if (move < 0 && m_FacingRight)
-			{
-				Flip();
-			}
-		}
-
-		if (jump)
-		{
-			
-			if(m_Grounded)
-			{
-				m_Doublejump = 0;
-			}
-			if(m_Grounded || m_Doublejump < 2)
-			{
-				
-				m_Rigidbody2D.linearVelocity = new Vector2(m_Rigidbody2D.linearVelocity.x,0);
-				m_Rigidbody2D.AddForce(new Vector2(0f, m_JumpForce));
-				m_Doublejump += 1;
-				m_Grounded = false;
-			}
-			
-		}
-	}
-
-    void Update()
     {
-        // moveH = Input.GetAxisRaw("Horizontal") * runSpeed ;
-        if (joystick.Horizontal >= .2f)
+        var wasGrounded = m_Grounded;
+        m_Grounded = false;
+        groundVelocity = Vector2.zero;
+        if (bodyCollider != null && Time.time >= ignoreGroundUntil)
         {
-            moveH = runSpeed;
-        }
-        else if (joystick.Horizontal <= -.2f)
-        {
-            moveH = -runSpeed;
-        }
-        else moveH = 0f;
-
-        animator.SetFloat("Speed", Mathf.Abs(moveH));
-
-        if (Input.GetButtonDown("Jump"))
-        {
-            jump = true;
-        }
-
-        if ((Input.GetButtonDown("Fire1") || clicked) && !attacking)
-        {
-            attacking = true;
-            attackTimer = 0.2f;
-            attackTrigger.enabled = true;
-            clicked = false;
-
-        }
-
-
-        if (attacking)
-        {
-            if (attackTimer > 0)
+            // Probe the physical feet, not legacy markers whose offsets differ between scenes.
+            var count = bodyCollider.Cast(Vector2.down, groundFilter, groundHits, groundProbeDistance);
+            for (var i = 0; i < count; i++)
             {
-                attackTimer -= Time.deltaTime;
-            }
-            else
-            {
-                attacking = false;
-                attackTrigger.enabled = false;
-
+                var hit = groundHits[i];
+                if (hit.collider == null || hit.rigidbody == m_Rigidbody2D || hit.normal.y < .6f)
+                    continue;
+                var platform = hit.collider.GetComponentInParent<MovingPlatform>();
+                var onGroundLayer = (m_WhatIsGround.value & (1 << hit.collider.gameObject.layer)) != 0;
+                if (!onGroundLayer && platform == null && !hit.collider.CompareTag("Platform"))
+                    continue;
+                var surfaceVelocity = platform != null ? platform.Velocity
+                    : (hit.rigidbody != null ? hit.rigidbody.GetPointVelocity(hit.point) : Vector2.zero);
+                if (m_Rigidbody2D.linearVelocity.y - surfaceVelocity.y > .5f)
+                    continue;
+                m_Grounded = true;
+                groundVelocity = surfaceVelocity;
+                break;
             }
         }
-
-        animator.SetBool("IsAttack", attacking);
+        if (m_Grounded)
+        {
+            lastGroundedTime = Time.time;
+            jumpsUsed = 0;
+            if (!wasGrounded)
+                OnLandEvent.Invoke();
+        }
+        Move(moveH, Time.time <= jumpBufferedUntil);
     }
 
-    
+    // Public for existing scene callbacks and the archived movement component.
+    public void Move(float move, bool jump)
+    {
+        if (Time.timeScale == 0f)
+            return;
+        if (Time.time >= knockbackUntil && (m_Grounded || m_AirControl))
+        {
+            var velocity = m_Rigidbody2D.linearVelocity;
+            velocity.x = Mathf.SmoothDamp(velocity.x - groundVelocity.x, Mathf.Clamp(move, -1f, 1f) * runSpeed,
+                ref smoothingVelocity, m_MovementSmoothing, Mathf.Infinity, Time.fixedDeltaTime) + groundVelocity.x;
+            if (m_Grounded)
+                velocity.y = groundVelocity.y;
+            m_Rigidbody2D.linearVelocity = velocity;
+        }
+        if ((move > 0f && !m_FacingRight) || (move < 0f && m_FacingRight))
+            Flip();
+        if (!jump)
+            return;
+
+        var canGroundJump = m_Grounded || Time.time - lastGroundedTime <= coyoteTime;
+        if (!canGroundJump && jumpsUsed >= 2)
+            return;
+        if (!canGroundJump && jumpsUsed == 0)
+            jumpsUsed = 1;
+        m_Rigidbody2D.linearVelocity = new Vector2(m_Rigidbody2D.linearVelocity.x, jumpSpeed + Mathf.Max(groundVelocity.y, 0f));
+        jumpsUsed++;
+        lastGroundedTime = float.NegativeInfinity;
+        jumpBufferedUntil = float.NegativeInfinity;
+        ignoreGroundUntil = Time.time + .08f;
+        m_Grounded = false;
+    }
 
     public IEnumerator Knockback(float knockDur, float knockPwr, Vector3 knockDir)
     {
-        float timer = 0;
-        m_Rigidbody2D.linearVelocity = new Vector2(m_Rigidbody2D.linearVelocity.x, 0);
-        while (knockDur > timer)
-        {
-            timer += Time.deltaTime;
-            if (m_FacingRight)
-            {
-                m_Rigidbody2D.AddForce(new Vector3(knockDir.x * -50, knockDir.y + knockPwr, transform.position.z));
-            }
-            else
-            {
-                m_Rigidbody2D.AddForce(new Vector3(knockDir.x * 50, knockDir.y + knockPwr, transform.position.z));
-            }
-        }
-        yield return 0;
+        var duration = Mathf.Max(.12f, knockDur);
+        knockbackUntil = Time.time + duration;
+        smoothingVelocity = 0f;
+        var strength = Mathf.Clamp(knockPwr * .02f, 4f, 10f);
+        m_Rigidbody2D.linearVelocity = new Vector2(m_FacingRight ? -strength : strength, strength);
+        yield return new WaitForSeconds(duration);
     }
 
-    void OnCollisionEnter2D(Collision2D col)
+    private void OnDisable()
     {
-        if (col.gameObject.tag.Equals("Platform"))
-        {
-            Debug.Log("OnPlatform");
-            this.transform.parent = col.transform;
-        }
-    }
-
-    void OnCollisionExit2D(Collision2D col)
-    {
-        if (col.gameObject.tag.Equals("Platform"))
-        {
-            Debug.Log("LeavingPlatform");
-            this.transform.parent = null;
-        }
+        moveH = 0f;
+        clicked = false;
+        attacking = false;
+        jumpBufferedUntil = float.NegativeInfinity;
+        if (attackTrigger != null)
+            attackTrigger.enabled = false;
     }
 
     private void Flip()
-	{
-		m_FacingRight = !m_FacingRight;
-		Vector3 theScale = transform.localScale;
-		theScale.x *= -1;
-		transform.localScale = theScale;
-	}
-
-    void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.tag == "Enemy")
-        {
-            enemy.Damage(1);
-            Debug.Log("Attacked");
-        }
+        m_FacingRight = !m_FacingRight;
+        var scale = transform.localScale;
+        scale.x *= -1f;
+        transform.localScale = scale;
+    }
 
-        if(collision.tag == "Boss")
-        {
+    private void OnTriggerEnter2D(Collider2D collision) => Hit(collision);
+    private void OnTriggerStay2D(Collider2D collision) => Hit(collision);
+
+    private void Hit(Collider2D collision)
+    {
+        if (!attacking || attackTrigger == null || !attackTrigger.IsTouching(collision))
+            return;
+        var enemy = collision.GetComponentInParent<Enemy>();
+        var boss = collision.GetComponentInParent<Boss>();
+        var target = enemy != null ? (Component)enemy : boss;
+        if (target == null || !attackHits.Add(target))
+            return;
+        if (enemy != null)
+            enemy.Damage(1);
+        else
             boss.Damage(1);
-            Debug.Log("Attacked");
-        }
     }
 }

@@ -1,50 +1,51 @@
-﻿using UnityEngine;
+using UnityEngine;
 using UnityEngine.EventSystems;
 
 public class FixedJoystick : Joystick
 {
-    Vector2 joystickPosition = Vector2.zero;
-    PointerEventData TempPED; // TempPointerEventData: This keeps track of the position where the touch event occured.
-    private Camera cam;
-    private bool _IsPressed = false;
+    private int? activePointer;
 
-    void Start()
+    public override void OnDrag(PointerEventData eventData)
     {
-        Canvas canvas = GetComponentInParent<Canvas>();
-        cam = canvas != null && canvas.renderMode != RenderMode.ScreenSpaceOverlay
-            ? canvas.worldCamera
-            : null;
-        joystickPosition = RectTransformUtility.WorldToScreenPoint(cam, handle.position);
-    }
-
-    public override void OnDrag(PointerEventData eventData) // OnDrag does not get called recursively automatically on mobile.  
-    {
-        Vector2 direction = eventData.position - joystickPosition;
-        inputVector = (direction.magnitude > background.sizeDelta.x / 2f) ? direction.normalized : direction / (background.sizeDelta.x / 2f);
+        if (activePointer != eventData.pointerId || background == null || handle == null)
+            return;
+        if (!RectTransformUtility.ScreenPointToLocalPointInRectangle(
+            background, eventData.position, eventData.pressEventCamera, out var local))
+            return;
+        var radius = background.rect.size * .5f;
+        if (radius.x <= 0f || radius.y <= 0f)
+            return;
+        inputVector = Vector2.ClampMagnitude(new Vector2(local.x / radius.x, local.y / radius.y), 1f);
         ClampJoystick();
-        handle.anchoredPosition = (inputVector * background.sizeDelta.x / 2f) * handleLimit;
+        handle.anchoredPosition = Vector2.Scale(inputVector, radius) * handleLimit;
     }
 
     public override void OnPointerDown(PointerEventData eventData)
     {
+        if (activePointer.HasValue)
+            return;
+        activePointer = eventData.pointerId;
         OnDrag(eventData);
-        TempPED = eventData; // Assign event data to a variable we can access later.
-        _IsPressed = true; // When you touch the joystick _IsPressed is set to true.
     }
 
     public override void OnPointerUp(PointerEventData eventData)
     {
-        inputVector = Vector2.zero;
-        handle.anchoredPosition = Vector2.zero;
-        _IsPressed = false; // When you release the joystick _IsPressed is set to false.
+        if (activePointer == eventData.pointerId)
+            ResetInput();
     }
 
-    public void Update()
+    private void OnDisable() => ResetInput();
+    private void OnApplicationFocus(bool focused)
     {
-        if (_IsPressed)
-        {
-            OnDrag(TempPED); // The OnDrag method repeatedly gets called until you let go of the joystick; this makes the movement of the joystick work as intended.
-            // This is by no means perfect but it works reasonably well.
-        }
+        if (!focused)
+            ResetInput();
+    }
+
+    private void ResetInput()
+    {
+        activePointer = null;
+        inputVector = Vector2.zero;
+        if (handle != null)
+            handle.anchoredPosition = Vector2.zero;
     }
 }

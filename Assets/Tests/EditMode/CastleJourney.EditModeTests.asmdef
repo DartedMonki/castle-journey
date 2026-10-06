@@ -1,6 +1,6 @@
 {
   "name": "CastleJourney.EditModeTests",
-  "references": ["UnityEngine.UI", "Cinemachine"],
+  "references": ["UnityEngine.UI", "Unity.Cinemachine", "Unity.InputSystem", "Unity.RenderPipelines.Universal.Runtime", "Unity.RenderPipelines.Core.Runtime"],
   "includePlatforms": ["Editor"],
   "optionalUnityReferences": ["TestAssemblies"],
   "autoReferenced": false

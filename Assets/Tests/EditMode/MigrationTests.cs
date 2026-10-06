@@ -1,6 +1,6 @@
 using System;
 using System.Linq;
-using Cinemachine;
+using Unity.Cinemachine;
 using NUnit.Framework;
 using UnityEditor;
 using UnityEditor.SceneManagement;
@@ -9,6 +9,10 @@ using UnityEngine.Events;
 using UnityEngine.Rendering;
 using UnityEngine.Tilemaps;
 using UnityEngine.UI;
+using UnityEngine.InputSystem.UI;
+using UnityEngine.Rendering.Universal;
+using UnityEngine.InputSystem;
+using UnityEngine.EventSystems;
 
 namespace CastleJourney.Tests
 {
@@ -48,18 +52,92 @@ namespace CastleJourney.Tests
         public void RendererAndInputRemainCompatible()
         {
             Assert.That(Application.unityVersion, Is.EqualTo("6000.6.4f1"));
-            Assert.That(GraphicsSettings.defaultRenderPipeline, Is.Null);
+            Assert.That(GraphicsSettings.defaultRenderPipeline, Is.TypeOf<UniversalRenderPipelineAsset>());
             var settings = new SerializedObject(AssetDatabase.LoadAllAssetsAtPath("ProjectSettings/ProjectSettings.asset")[0]);
-            Assert.That(settings.FindProperty("activeInputHandler").intValue, Is.Zero);
+            Assert.That(settings.FindProperty("activeInputHandler").intValue, Is.EqualTo(1));
             Assert.That(Physics2D.gravity, Is.EqualTo(new Vector2(0, -9.81f)));
             Assert.That(Time.fixedDeltaTime, Is.EqualTo(0.02f).Within(0.00001f));
         }
 
         [Test]
-        public void CinemachineIsNotSilentlyReplacedByBundledVersion()
+        public void SupportedCinemachineIsInstalled()
         {
             var package = UnityEditor.PackageManager.PackageInfo.FindForAssetPath("Packages/com.unity.cinemachine");
-            Assert.That(package.version, Is.EqualTo("2.10.7"));
+            Assert.That(package.version, Is.EqualTo("6.6.0"));
+        }
+
+        [Test]
+        public void InputActionsHaveKeyboardGamepadAndUiBindings()
+        {
+            var actions = AssetDatabase.LoadAssetAtPath<InputActionAsset>("Assets/Settings/CastleJourney.inputactions");
+            Assert.That(actions, Is.Not.Null);
+            foreach (var name in new[] { "Move", "Jump", "Attack", "Pause" })
+            {
+                var action = actions.FindAction("Gameplay/" + name, true);
+                Assert.That(action.bindings.Any(binding => binding.path.StartsWith("<Keyboard>")), Is.True, name);
+                Assert.That(action.bindings.Any(binding => binding.path.StartsWith("<Gamepad>")), Is.True, name);
+            }
+            foreach (var name in new[] { "Point", "Click", "Navigate", "Submit", "Cancel" })
+                Assert.That(actions.FindAction("UI/" + name), Is.Not.Null, name);
+            Assert.That(actions.FindAction("Gameplay/Attack").bindings.Any(binding => binding.path == "<Mouse>/leftButton"),
+                Is.False, "UI clicks must not also fire gameplay attacks.");
+        }
+
+        [TestCase("Assets/Scenes/UI/MainMenu.unity")]
+        [TestCase("Assets/Scenes/World1.unity")]
+        [TestCase("Assets/Scenes/World2.unity")]
+        [TestCase("Assets/Scenes/World3.unity")]
+        [TestCase("Assets/Scenes/UI/EndGame.unity")]
+        public void ScenesUseModernInputAndConsistentCanvasScaling(string path)
+        {
+            var scene = EditorSceneManager.OpenScene(path, OpenSceneMode.Single);
+            var components = scene.GetRootGameObjects()
+                .SelectMany(root => root.GetComponentsInChildren<Component>(true)).ToArray();
+            Assert.That(components.OfType<EventSystem>().Count(), Is.EqualTo(1));
+            Assert.That(components.OfType<StandaloneInputModule>(), Is.Empty);
+            var module = components.OfType<InputSystemUIInputModule>().Single();
+            Assert.That(module.actionsAsset, Is.Not.Null);
+            foreach (var reference in new[] { module.point, module.leftClick, module.move, module.submit, module.cancel })
+            {
+                Assert.That(reference, Is.Not.Null);
+                Assert.That(reference.action, Is.Not.Null);
+            }
+            foreach (var canvas in components.OfType<Canvas>().Where(canvas => canvas.isRootCanvas))
+            {
+                var scaler = canvas.GetComponent<CanvasScaler>();
+                Assert.That(scaler, Is.Not.Null, canvas.name);
+                Assert.That(scaler.uiScaleMode, Is.EqualTo(CanvasScaler.ScaleMode.ScaleWithScreenSize), canvas.name);
+                Assert.That(scaler.referenceResolution, Is.EqualTo(new Vector2(1280, 720)), canvas.name);
+                Assert.That(scaler.matchWidthOrHeight, Is.EqualTo(.5f), canvas.name);
+                Assert.That(canvas.transform.Find("SafeArea"), Is.Not.Null, canvas.name);
+            }
+            Assert.That(components.OfType<MonoBehaviour>().Any(component =>
+                component != null && component.GetType().Name == "CinemachineVirtualCamera"), Is.False);
+            foreach (var renderer in components.OfType<Renderer>().Where(renderer =>
+                renderer is SpriteRenderer || renderer is TilemapRenderer))
+                foreach (var material in renderer.sharedMaterials)
+                {
+                    Assert.That(material, Is.Not.Null, renderer.name);
+                    Assert.That(material.shader.name, Does.StartWith("Universal Render Pipeline/"), renderer.name);
+                }
+        }
+
+        [Test]
+        public void QualityLevelsUseSameUrpAsset()
+        {
+            var original = QualitySettings.GetQualityLevel();
+            try
+            {
+                for (var i = 0; i < QualitySettings.names.Length; i++)
+                {
+                    QualitySettings.SetQualityLevel(i, false);
+                    Assert.That(QualitySettings.renderPipeline, Is.EqualTo(GraphicsSettings.defaultRenderPipeline));
+                }
+            }
+            finally
+            {
+                QualitySettings.SetQualityLevel(original, false);
+            }
         }
 
         [TestCase("Assets/Scenes/UI/MainMenu.unity")]
@@ -103,9 +181,9 @@ namespace CastleJourney.Tests
             var scene = EditorSceneManager.OpenScene(path, OpenSceneMode.Single);
             var components = scene.GetRootGameObjects()
                 .SelectMany(root => root.GetComponentsInChildren<Component>(true)).ToArray();
-            var camera = components.OfType<CinemachineVirtualCamera>().FirstOrDefault();
+            var camera = components.OfType<CinemachineCamera>().FirstOrDefault();
             Assert.That(camera, Is.Not.Null);
-            Assert.That(camera.Follow, Is.Not.Null);
+            Assert.That(camera.Target.TrackingTarget, Is.Not.Null);
             Assert.That(components.OfType<CinemachineBrain>(), Is.Not.Empty);
             var tileCount = 0;
             foreach (var tilemap in components.OfType<Tilemap>())
