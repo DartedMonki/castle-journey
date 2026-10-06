@@ -10,7 +10,7 @@ public class ExtraLife : MonoBehaviour
     // Use this for initialization
 	void Start()
 	{
-        health = FindFirstObjectByType<PlayerHealth>();
+        health = FindAnyObjectByType<PlayerHealth>();
 	}
 
     private void OnTriggerEnter2D(Collider2D collision)

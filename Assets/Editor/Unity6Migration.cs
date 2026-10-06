@@ -7,6 +7,7 @@ using UnityEditor.Build.Reporting;
 using UnityEditor.SceneManagement;
 using UnityEngine;
 using UnityEngine.Rendering;
+using UnityEngine.Rendering.Universal;
 
 namespace CastleJourney.Editor
 {
@@ -30,12 +31,15 @@ namespace CastleJourney.Editor
             if (!actualScenes.SequenceEqual(ScenePaths))
                 throw new BuildFailedException("Build scene order changed; gameplay uses numeric scene indices.");
 
-            if (GraphicsSettings.defaultRenderPipeline != null)
-                throw new BuildFailedException("This project must retain the Built-in Render Pipeline.");
+            if (!(GraphicsSettings.defaultRenderPipeline is UniversalRenderPipelineAsset))
+                throw new BuildFailedException("Assign the Castle Journey URP asset in Graphics Settings.");
 
             var package = UnityEditor.PackageManager.PackageInfo.FindForAssetPath("Packages/com.unity.cinemachine");
-            if (package == null || package.version != "2.10.7")
-                throw new BuildFailedException("Cinemachine must resolve to 2.10.7, not Unity's bundled version.");
+            if (package == null || package.version != "6.6.0")
+                throw new BuildFailedException("Cinemachine must resolve to the editor's supported 6.6.0 version.");
+            var settings = new SerializedObject(AssetDatabase.LoadAllAssetsAtPath("ProjectSettings/ProjectSettings.asset")[0]);
+            if (settings.FindProperty("activeInputHandler").intValue != 1)
+                throw new BuildFailedException("Use Input System Package (New), not the legacy or Both backends.");
 
             var setup = EditorSceneManager.GetSceneManagerSetup();
             try
@@ -80,7 +84,7 @@ namespace CastleJourney.Editor
             var settings = new SerializedObject(AssetDatabase.LoadAllAssetsAtPath("ProjectSettings/ProjectSettings.asset")[0]);
             var input = settings.FindProperty("activeInputHandler");
             if (input != null)
-                input.intValue = 0;
+                input.intValue = 1;
             settings.ApplyModifiedPropertiesWithoutUndo();
 
             RepairStaleAttackTriggers();

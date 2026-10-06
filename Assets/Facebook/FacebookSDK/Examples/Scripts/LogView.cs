@@ -45,10 +45,11 @@ namespace Facebook.Unity.Example
             }
 
             #if UNITY_IOS || UNITY_ANDROID || UNITY_WP8
-            if (Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Moved)
+            var screen = UnityEngine.InputSystem.Touchscreen.current;
+            if (screen != null && screen.primaryTouch.phase.ReadValue() == UnityEngine.InputSystem.TouchPhase.Moved)
             {
                 Vector2 scrollPosition = this.ScrollPosition;
-                scrollPosition.y += Input.GetTouch(0).deltaPosition.y;
+                scrollPosition.y += screen.primaryTouch.delta.ReadValue().y;
                 this.ScrollPosition = scrollPosition;
             }
             #endif

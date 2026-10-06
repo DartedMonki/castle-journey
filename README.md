@@ -10,8 +10,9 @@ Selamat datang di game terbaru kami: sebuah platformer 2D yang seru untuk perang
 
 Want to contribute? Great!
 
-Castle Journey uses **Unity 6000.6.4f1** for development. The project retains the
-Built-in Render Pipeline, legacy input, and Cinemachine 2 cameras.
+Castle Journey uses **Unity 6000.6.4f1**, **URP's 2D Renderer**, the **Input System**,
+and **Cinemachine 6.6**. Existing levels and artwork are retained, with modernized
+movement and consistent landscape HUD scaling.
 
 Open your favorite Terminal and run this command.
 ```sh
@@ -41,3 +42,22 @@ and stop Play mode before using it.
 
 See [the Unity 6 migration notes](docs/UNITY6_MIGRATION.md) for package pins,
 build commands, Android setup, and remaining device/service verification.
+
+## Controls
+
+| Action | Keyboard | Gamepad | Touch |
+| --- | --- | --- | --- |
+| Move | A/D or left/right arrows | Left stick or D-pad | Left joystick |
+| Jump / double jump | Space | South button | Jump button |
+| Attack | J or left Ctrl | West button | Attack button |
+| Pause / resume | Escape | Start | Pause / Resume buttons |
+
+Menus support mouse, touch, keyboard navigation, and gamepad navigation.
+Gameplay attacks do not use the left mouse button, so menu clicks cannot attack.
+
+Movement is tuned on `PlayerController` in each world and the player prefabs.
+`Run Speed` is in world units per second; `Jump Speed`, smoothing, coyote time,
+and jump buffering can be adjusted independently.
+
+See [the modernization notes](docs/UNITY6_MODERNIZATION.md) for implementation
+details, verification, and a gradual playtesting checklist.

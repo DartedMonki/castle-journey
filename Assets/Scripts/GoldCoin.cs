@@ -9,7 +9,7 @@ public class GoldCoin : MonoBehaviour
     // Use this for initialization
 	void Start()
 	{
-        score = FindFirstObjectByType<Score>();
+        score = FindAnyObjectByType<Score>();
 	}
 
     private void OnTriggerEnter2D(Collider2D collision)
